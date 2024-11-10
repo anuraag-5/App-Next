@@ -29,6 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
       </body>
     </html>
   );
