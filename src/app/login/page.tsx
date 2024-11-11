@@ -2,7 +2,7 @@
 import Link from "next/link"; // its a anchor tag in next.
 import React from "react";
 import { useRouter } from "next/navigation"; // to navigate to different pages. 
-// // ex:- after signup to navigate to home page
+// ex:- after signup to navigate to home page.
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -47,7 +47,7 @@ export default function LoginPage(){
                     trigger: "loop",
                     style: { width: "50px", height: "50px" }
                 })
-            ) : (
+            ):(
                 <>
                     <h1>Login</h1>
     
@@ -73,14 +73,13 @@ export default function LoginPage(){
 
                     <button
                         onClick={onLogin}
-                        disabled={buttonDisable || loading}
-                        className={`p-2 text-center border border-gray-300 rounded-lg mb-4 focus:outline-none ${
+                        disabled = {buttonDisable || loading}
+                        className = {`py-2 px-5 text-center border border-gray-300 rounded-full mb-4 focus:outline-none bg-blue-500 ${
                             buttonDisable || loading ? "bg-gray-300 cursor-not-allowed" : "focus:border-gray-600"
                         }`}
                     >
                         Login
                     </button>
-
                     <Link href="/login">Visit SignUp</Link>
                 </>
             )}
