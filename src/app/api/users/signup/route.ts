@@ -2,6 +2,7 @@ import  connect  from "@/dbConfig/dbConfig"
 import User from "@/models/userModal"
 import { NextRequest , NextResponse } from "next/server"
 import bcryptjs from "bcryptjs"
+import { sendEmail } from "@/helpers/nodemailer"
 
 connect()
 
@@ -25,17 +26,30 @@ export async function POST(req : NextRequest) {
         })
 
         const savedUser = await newUser.save();
-        return NextResponse.json({
-            message : "User created success" ,
-            success : true ,
-            savedUser
-        })
+        try {
+            await sendEmail({
+                email,
+                emailType: "VERIFY",
+                userId: savedUser._id
+            });
+        } catch (emailError) {
+            console.error("Error sending email:", emailError);
+            return NextResponse.json({
+                error: "User created, but verification email failed"
+            }, { status: 500 });
+        } finally{
+            return NextResponse.json({
+                message: "User created successfully",
+                success: true,
+                user: savedUser,
+            }, { status: 201 });
+        }
 
-    } catch {
+    } catch (error) {
+        console.error("Signup error:", error);
         return NextResponse.json({
             error: "An error occurred during signup"
-        }, {
-            status: 500
-        });
+        }, { status: 500 });
     }
+    
 }

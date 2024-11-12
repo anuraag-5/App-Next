@@ -32,6 +32,9 @@ export default function LoginPage(){
         }
     }
 
+    const onForgetPass = () => {
+        router.push("/password")
+    }
     React.useEffect(() => {
         if(user.email.length > 0 && user.password.length > 0)
             setButtonDisable(false)
@@ -80,7 +83,13 @@ export default function LoginPage(){
                     >
                         Login
                     </button>
-                    <Link href="/login">Visit SignUp</Link>
+                    <button
+                        onClick={onForgetPass}
+                        className = {`py-2 px-5 text-center border border-gray-300 rounded-full mb-4 focus:outline-none bg-blue-500`}
+                    >
+                        Forget Password?
+                    </button>
+                    <Link href="/signup">Visit SignUp</Link>
                 </>
             )}
         </div>
