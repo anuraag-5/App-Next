@@ -15,7 +15,9 @@ export async function GET(req : NextRequest){
         })
 
 
-    } catch (error:any) {
-        return NextResponse.json({error : error.message} , {status : 400})
+    } catch (error: unknown) {
+        if(error instanceof Error){
+            return NextResponse.json({error : error.message} , {status : 400})
+        }
     }
 }

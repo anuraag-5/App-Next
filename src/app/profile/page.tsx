@@ -1,13 +1,13 @@
 "use client"
 import { useRouter } from "next/navigation"
 import axios from "axios"
-import React from "react"
+import React , { useState } from "react"
 import Link from "next/link"
 
 export default function ProfilePage(){
     const router = useRouter()
-    const [ loading , setLoading ] = React.useState(false)
-    const [ data , setData] = React.useState("Nothing")
+    const [ loading , setLoading ] = useState(false)
+    const [ data , setData] = useState("Nothing")
 
     const logout = async () => {
         try {
@@ -15,9 +15,13 @@ export default function ProfilePage(){
             await axios.get("/api/users/logout")
             console.log("Logout Successfull")
             router.push("/login")
-        } catch (error:any) {
-            console.log(error.message)
-        } finally{
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+              console.log(error.message);
+            } else {
+              console.error("Unexpected error:", error);
+            }
+          } finally{
             setLoading(false)
         }
     }

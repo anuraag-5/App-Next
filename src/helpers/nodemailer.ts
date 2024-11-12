@@ -4,7 +4,13 @@ import User from "@/models/userModal";
 import bcryptjs from "bcryptjs";
 connect()
 
-export const sendEmail = async ({ email, emailType, userId }: any) => {
+interface SendEmailParams {
+  email: string;
+  emailType: "VERIFY" | "RESET";
+  userId: string;
+}
+
+export const sendEmail = async ({ email, emailType, userId }: SendEmailParams) => {
   try {
     const hashedToken = await bcryptjs.hash(userId.toString(), 10);
 
@@ -21,12 +27,12 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
     }
 
     // Looking to send emails in production? Check out our Email API/SMTP product!
-    var transport = nodemailer.createTransport({
+    const transport = nodemailer.createTransport({
       host: "sandbox.smtp.mailtrap.io",
       port: 2525,
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+        user: process.env.MAIL_USER!,
+        pass: process.env.MAIL_PASS!,
       },
     });
 
@@ -45,7 +51,10 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 
     return mailResponse;
 
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unknown error occurred");
+}
 };

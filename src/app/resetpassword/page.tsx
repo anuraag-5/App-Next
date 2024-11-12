@@ -1,27 +1,31 @@
 "use client"
 
-import React, { useRef } from "react";
+import React, { useRef , useState , useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export function ResetPasswordPage() {
   const router = useRouter()
-  const ref : any = useRef(null);
-  const [ token , setToken ] = React.useState("")
+  const ref = useRef<HTMLInputElement>(null);
+  const [ token , setToken ] = useState("")
 
   const onSubmit = async () => {
     try {
-      const password = ref.current.value;
+      const password = ref.current?.value;
       const response = await axios.post('/api/users/resetpassword', { password , token });
       router.push("/login")
       return response;
       
-    } catch (error:any) {
-      console.log(error.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.message);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const urlToken = window.location.search.split("=")[1];
     setToken(urlToken)
   } , [])

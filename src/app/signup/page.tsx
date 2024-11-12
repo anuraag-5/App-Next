@@ -1,22 +1,22 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React , { useState , useEffect} from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 export default function SignupPage() {
     const router = useRouter();
-    const [user, setUser] = React.useState({
+    const [user, setUser] = useState({
         email: "",
         password: "",
         username: ""
     });
-    const [buttonDisable, setButtonDisable] = React.useState(true);
-    const [loading, setLoading] = React.useState(false);
+    const [buttonDisable, setButtonDisable] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     // Enable button when all fields have values
-    React.useEffect(() => {
+    useEffect(() => {
         setButtonDisable(!(user.email && user.password && user.username));
     }, [user]);
 
@@ -27,10 +27,13 @@ export default function SignupPage() {
             console.log("SignUp Success", response.data);
             toast.success("Signup successful!");
             router.push("/login");
-        } catch (error : any) {
-            console.log("Signup failed", error.message);
-            toast.error("Signup failed. Please try again.");
-        } finally {
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+              console.log(error.message);
+            } else {
+              console.error("Unexpected error:", error);
+            }
+          } finally {
             setLoading(false);
         }
     };

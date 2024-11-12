@@ -24,9 +24,13 @@ export default function LoginPage(){
             toast.success("Signup successful!");
             router.push("/profile");
 
-        } catch (error: any) {
-            console.log(error.message)
-        }
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+              console.log(error.message);
+            } else {
+              console.error("Unexpected error:", error);
+            }
+          }
         finally {
             setLoading(false)
         }

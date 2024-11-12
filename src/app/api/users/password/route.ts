@@ -25,14 +25,14 @@ export async function POST(req : NextRequest) {
 
         return NextResponse.json({
             message : "User found" ,
-            user
+            user ,
+            response
         } , {
             status : 200
         })
-    } catch (error:any) {
-        return NextResponse.json({
-            error : error.message
-        } , 
-    {status :  500})
+    } catch (error: unknown) {
+        if(error instanceof Error){
+            return NextResponse.json({error : error.message} , {status : 400})
+        }
     }
 }

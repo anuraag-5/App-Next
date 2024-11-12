@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -29,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <script src="https://cdn.lordicon.com/lordicon.js"></script>
+        <Script src="https://cdn.lordicon.com/lordicon.js" strategy="afterInteractive" />
       </body>
     </html>
   );
