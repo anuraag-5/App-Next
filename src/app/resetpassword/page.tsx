@@ -4,7 +4,7 @@ import React, { useRef , useState , useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-export function ResetPasswordPage() {
+function ResetPasswordPage() {
   const router = useRouter()
   const ref = useRef<HTMLInputElement>(null);
   const [ token , setToken ] = useState("")
