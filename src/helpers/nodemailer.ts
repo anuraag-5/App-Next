@@ -2,7 +2,7 @@ import connect from "@/dbConfig/dbConfig";
 import nodemailer from "nodemailer";
 import User from "@/models/userModal";
 import bcryptjs from "bcryptjs";
-connect()
+connect();
 
 interface SendEmailParams {
   email: string;
@@ -10,7 +10,11 @@ interface SendEmailParams {
   userId: string;
 }
 
-export const sendEmail = async ({ email, emailType, userId }: SendEmailParams) => {
+export const sendEmail = async ({
+  email,
+  emailType,
+  userId,
+}: SendEmailParams) => {
   try {
     const hashedToken = await bcryptjs.hash(userId.toString(), 10);
 
@@ -31,30 +35,32 @@ export const sendEmail = async ({ email, emailType, userId }: SendEmailParams) =
       host: "sandbox.smtp.mailtrap.io",
       port: 2525,
       auth: {
-        user: process.env.MAIL_USER!,
-        pass: process.env.MAIL_PASS!,
+        user: "d50cb78f602022",
+        pass: "f87fed7b984d74",
       },
     });
 
     const mailOptions = {
-        from : "anuragbhoite229@gmail.com" ,
-        to : email ,
-        subject : emailType === "VERIFY" ? "Verify your email" : "Reset Password" ,
-        html : `
-        <p> Click <a href = "${process.env.DOMAIN}/${emailType === "VERIFY" ? "verifyemail" : "resetpassword"}?token=${hashedToken}">here</a>
+      from: "anuragbhoite229@gmail.com",
+      to: email,
+      subject: emailType === "VERIFY" ? "Verify your email" : "Reset Password",
+      html: `
+        <p> Click <a href = "${process.env.DOMAIN}/${
+        emailType === "VERIFY" ? "verifyemail" : "resetpassword"
+      }?token=${hashedToken}">here</a>
         to ${
-        emailType === "VERIFY" ? "Verify your email" : "Reset your Password"}</p>       
-        `
-    }
+          emailType === "VERIFY" ? "Verify your email" : "Reset your Password"
+        }</p>       
+        `,
+    };
 
-    const mailResponse = await transport.sendMail(mailOptions)
+    const mailResponse = await transport.sendMail(mailOptions);
 
     return mailResponse;
-
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);
     }
     throw new Error("An unknown error occurred");
-}
+  }
 };
